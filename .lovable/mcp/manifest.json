@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.1",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://gnxqpmtpwlqyfvvqyprj.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "ai-study-buddy",
+      "version": "0.1.0",
+      "title": "AI Study Buddy"
+    },
+    "tools": [
+      {
+        "name": "list_decks",
+        "title": "List decks",
+        "description": "List the signed-in student's flashcard decks, newest first.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Maximum decks to return (default 25).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "includeArchived": {
+              "description": "Include decks the student archived.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_deck_cards",
+        "title": "Get deck cards",
+        "description": "Read the flashcards (question, answer, explanation, topic, difficulty) of a deck the student can access.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "deckId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "The deck id, from list_decks or search_shared_decks."
+            },
+            "limit": {
+              "description": "Maximum cards to return (default 60).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          },
+          "required": [
+            "deckId"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_deck",
+        "title": "Create deck",
+        "description": "Create a new flashcard deck for the signed-in student, with its cards.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Deck title, e.g. 'Calculus I — Limits'."
+            },
+            "subject": {
+              "description": "Subject, e.g. 'Mathematics'.",
+              "type": "string"
+            },
+            "courseName": {
+              "description": "Course name so classmates can find it.",
+              "type": "string"
+            },
+            "shareWithProgram": {
+              "description": "Share this deck with students in the same program.",
+              "type": "boolean"
+            },
+            "cards": {
+              "minItems": 1,
+              "maxItems": 100,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "answer": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "explanation": {
+                    "type": "string"
+                  },
+                  "topic": {
+                    "type": "string"
+                  },
+                  "difficulty": {
+                    "type": "string",
+                    "enum": [
+                      "Easy",
+                      "Medium",
+                      "Hard"
+                    ]
+                  }
+                },
+                "required": [
+                  "question",
+                  "answer"
+                ]
+              },
+              "description": "The flashcards to add to the deck."
+            }
+          },
+          "required": [
+            "title",
+            "cards"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_shared_decks",
+        "title": "Search shared decks",
+        "description": "Search decks shared publicly or with the student's program, by program, title, subject or course name.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "query": {
+              "description": "Search text; leave empty to list recent shared decks.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_study_progress",
+        "title": "Get study progress",
+        "description": "Summarise the signed-in student's study progress: questions answered, correct answers and accuracy.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

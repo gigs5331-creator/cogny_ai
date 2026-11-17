@@ -1,0 +1,14 @@
+{
+  "name": "COGNY — Learn Smarter. Understand Deeper.",
+  "short_name": "COGNY",
+  "description": "AI-powered academic learning platform — study flashcards, question banks, and practice exams online or offline.",
+  "id": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F7FB",
+  "theme_color": "#101828",
+  "icons": [
+    { "src": "/assets/aistudio/cogny_logo_b4165c26.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

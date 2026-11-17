@@ -1,0 +1,7 @@
+{
+  "name": "Cogni",
+  "description": "Turn lecture notes, documents, and past papers into AI-powered flashcards and quizzes.",
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
